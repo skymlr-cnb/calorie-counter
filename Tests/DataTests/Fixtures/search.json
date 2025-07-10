@@ -1,0 +1,18 @@
+{
+  "products": [
+    {
+      "_id": "1",
+      "product_name": "Apple",
+      "nutriments": {
+        "energy-kcal_100g": 52
+      }
+    },
+    {
+      "_id": "2",
+      "product_name": "Banana",
+      "nutriments": {
+        "energy-kcal_serving": 89
+      }
+    }
+  ]
+}
