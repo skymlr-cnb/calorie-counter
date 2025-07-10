@@ -56,3 +56,9 @@
     }
   #endif
 #endif
+
+struct UITestHarnessView_Previews: PreviewProvider {
+    static var previews: some View {
+        UITestHarnessView()
+    }
+}
