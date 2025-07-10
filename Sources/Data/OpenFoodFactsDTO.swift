@@ -7,11 +7,15 @@ struct SearchResponseDTO: Decodable {
 struct ProductDTO: Decodable {
   let id: String
   let productName: String?
+  let productNameEn: String?
+  let genericNameEn: String?
   let nutriments: NutrimentsDTO?
 
   enum CodingKeys: String, CodingKey {
     case id = "_id"
     case productName = "product_name"
+    case productNameEn = "product_name_en"
+    case genericNameEn = "generic_name_en"
     case nutriments
   }
 }
