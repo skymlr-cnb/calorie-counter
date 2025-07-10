@@ -1,7 +1,7 @@
 import Domain
 import Foundation
 
-public struct FoodSearchRepository: FoodSearchService {
+public struct FoodSearchRepository: FoodSearchService, Sendable {
   private let client: APIClient
   private let jsonDecoder: JSONDecoder
 

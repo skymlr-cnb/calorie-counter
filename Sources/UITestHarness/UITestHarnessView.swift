@@ -22,8 +22,10 @@
             .textFieldStyle(.roundedBorder)
             .padding()
           Button("Search") {
+            let q = query
+            let svc = service
             Task {
-              results = (try? await service.search(query: query)) ?? []
+              results = (try? await svc.search(query: q)) ?? []
             }
           }
           List {
@@ -37,8 +39,9 @@
                 }
                 Spacer()
                 Button("Add") {
+                  let food = item
                   Task {
-                    _ = await counter.add(item: item)
+                    _ = await counter.add(item: food)
                     total = await counter.totalCalories()
                   }
                 }

@@ -4,11 +4,11 @@ import Foundation
   import FoundationNetworking
 #endif
 
-public protocol APIClient {
+public protocol APIClient: Sendable {
   func get(url: URL) async throws -> Data
 }
 
-public struct URLSessionAPIClient: APIClient {
+public struct URLSessionAPIClient: APIClient, @unchecked Sendable {
   private let session: URLSession
 
   public init(session: URLSession = .shared) {

@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol FoodSearchService {
+public protocol FoodSearchService: Sendable {
   func search(query: String) async throws -> [FoodItem]
 }
