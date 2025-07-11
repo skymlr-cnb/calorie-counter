@@ -8,11 +8,12 @@
       @State private var query: String = ""
       @State private var results: [FoodItem] = []
       @State private var total: Int = 0
+      @State private var isLoading: Bool = false
 
       let service: FoodSearchService
       let counter = CalorieCounter()
 
-      public init(service: FoodSearchService = FoodSearchRepository()) {
+      public init(service: FoodSearchService = LLMFoodSearchRepository(client: URLLLMClient(url: URL(string: "https://api-inference.huggingface.co/models/google/flan-t5-base")!))) {
         self.service = service
       }
 
@@ -24,9 +25,17 @@
           Button("Search") {
             let q = query
             let svc = service
+            isLoading = true
             Task {
-              results = (try? await svc.search(query: q)) ?? []
+              let newResults = (try? await svc.search(query: q)) ?? []
+              await MainActor.run {
+                results = newResults
+                isLoading = false
+              }
             }
+          }
+          if isLoading {
+            ProgressView().padding()
           }
           List {
             ForEach(results) { item in
@@ -57,8 +66,12 @@
   #endif
 #endif
 
-struct UITestHarnessView_Previews: PreviewProvider {
-    static var previews: some View {
-        UITestHarnessView()
+#if DEBUG
+  #if canImport(SwiftUI)
+    struct UITestHarnessView_Previews: PreviewProvider {
+        static var previews: some View {
+            UITestHarnessView()
+        }
     }
-}
+  #endif
+#endif
