@@ -32,6 +32,10 @@ let client = URLLLMClient(url: URL(string: "https://api.example.com/model")!,
 UITestHarnessView(service: LLMFoodSearchRepository(client: client))
 ```
 
+`URLLLMClient` will also read a HuggingFace token from the `HF_API_TOKEN` environment
+variable if no `Authorization` header is supplied. Set this variable to avoid 401
+errors with the default endpoint.
+
 Non-2xx responses are printed to the console with their HTTP status code and body to aid debugging.
 
 Run `swift build` and `swift test` to verify.

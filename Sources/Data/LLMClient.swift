@@ -11,12 +11,16 @@ public protocol LLMClient: Sendable {
 public struct URLLLMClient: LLMClient, @unchecked Sendable {
   private let url: URL
   private let session: URLSession
-  private let headers: [String: String]
+  private var headers: [String: String]
 
   public init(url: URL, headers: [String: String] = [:], session: URLSession = .shared) {
     self.url = url
     self.headers = headers
     self.session = session
+
+    if headers["Authorization"] == nil, let token = ProcessInfo.processInfo.environment["HF_API_TOKEN"], !token.isEmpty {
+      self.headers["Authorization"] = "Bearer \(token)"
+    }
   }
 
   public func send(prompt: String) async throws -> String {
