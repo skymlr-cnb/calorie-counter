@@ -1,15 +1,17 @@
 {
   "products": [
     {
-      "_id": "1",
-      "product_name": "Apple",
+      "code": "1",
+      "product_name": "Apfel",
+      "product_name_en": "Apple",
       "nutriments": {
         "energy-kcal_100g": 52
       }
     },
     {
-      "_id": "2",
-      "product_name": "Banana",
+      "code": "2",
+      "product_name": "Banane",
+      "generic_name_en": "Banana (ripe)",
       "nutriments": {
         "energy-kcal_serving": 89
       }

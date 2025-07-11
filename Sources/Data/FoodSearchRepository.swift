@@ -13,17 +13,16 @@ public struct FoodSearchRepository: FoodSearchService, Sendable {
   public func search(query: String) async throws -> [FoodItem] {
     let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
     let urlString =
-      "https://world.openfoodfacts.org/api/v2/search?categories_tags_en=food&search_terms=\(encoded)&page_size=20"
+      "https://world.openfoodfacts.org/api/v2/search?categories_tags_en=food&search_terms=\(encoded)&fields=code,product_name,product_name_en,generic_name_en,nutriments&page_size=20"
     guard let url = URL(string: urlString) else { return [] }
     let data = try await client.get(url: url)
     let dto = try jsonDecoder.decode(SearchResponseDTO.self, from: data)
     return dto.products.compactMap { product in
-      guard
-        let name = product.productName,
-        let nutriments = product.nutriments
-      else { return nil }
+      guard let nutriments = product.nutriments else { return nil }
+      let name = product.genericNameEn ?? product.productNameEn ?? product.productName
+      guard let cleanName = name?.trimmingCharacters(in: .whitespacesAndNewlines), !cleanName.isEmpty else { return nil }
       let calories = Int(nutriments.energyKcal100g ?? nutriments.energyKcalServing ?? 0)
-      return FoodItem(id: product.id, name: name, caloriesPer100g: calories)
+      return FoodItem(id: product.id, name: cleanName, caloriesPer100g: calories)
     }
   }
 }
