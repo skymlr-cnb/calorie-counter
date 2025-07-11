@@ -14,6 +14,7 @@ final class FoodSearchRepositoryTests: XCTestCase {
     XCTAssertEqual(results.count, 2)
     XCTAssertEqual(results[0].name, "Apple")
     XCTAssertEqual(results[0].caloriesPer100g, 52)
+    XCTAssertEqual(results[1].name, "Banana (ripe)")
     XCTAssertEqual(results[1].caloriesPer100g, 89)
   }
 }
