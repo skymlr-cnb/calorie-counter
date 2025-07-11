@@ -23,12 +23,15 @@ CalorieCounterSDK.UITestHarnessView()
 ### Customising the LLM
 
 `UITestHarnessView` uses `LLMFoodSearchRepository` with a `URLLLMClient` by default.
-You can swap in any `LLMClient` implementation to experiment with different
-models:
+If your chosen model requires an API token, pass any extra HTTP headers to the client:
 
 ```swift
-let client = URLLLMClient(url: URL(string: "https://api.example.com/model")!)
+let headers = ["Authorization": "Bearer YOUR_TOKEN"]
+let client = URLLLMClient(url: URL(string: "https://api.example.com/model")!,
+                          headers: headers)
 UITestHarnessView(service: LLMFoodSearchRepository(client: client))
 ```
+
+Non-2xx responses are printed to the console with their HTTP status code and body to aid debugging.
 
 Run `swift build` and `swift test` to verify.
