@@ -16,10 +16,17 @@ public struct LLMFoodSearchRepository: FoodSearchService, Sendable {
     """
 
     let responseText = try await client.send(prompt: prompt)
+    print("[LLMFoodSearchRepository] Raw response: \(responseText)")
+
     let data = Data(responseText.utf8)
-    let result = try jsonDecoder.decode(LLMFoodResult.self, from: data)
-    return result.items.enumerated().map { idx, element in
-      FoodItem(id: "\(idx)-\(element.name)", name: element.name, caloriesPer100g: element.caloriesPer100g)
+    do {
+      let result = try jsonDecoder.decode(LLMFoodResult.self, from: data)
+      return result.items.enumerated().map { idx, element in
+        FoodItem(id: "\(idx)-\(element.name)", name: element.name, caloriesPer100g: element.caloriesPer100g)
+      }
+    } catch {
+      print("[LLMFoodSearchRepository] Failed to decode response: \(error)")
+      throw error
     }
   }
 }

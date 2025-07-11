@@ -15,6 +15,18 @@ final class LLMFoodSearchRepositoryTests: XCTestCase {
     XCTAssertEqual(items[1].name, "Banana")
     XCTAssertEqual(items[1].caloriesPer100g, 89)
   }
+
+  func testSearchThrowsForInvalidJSON() async {
+    let response = "{\"itemsz\":[]}" // malformed key
+    let client = MockLLMClient(response: response)
+    let repo = LLMFoodSearchRepository(client: client)
+    do {
+      _ = try await repo.search(query: "fruit")
+      XCTFail("Expected error")
+    } catch {
+      // success - error thrown
+    }
+  }
 }
 
 private struct MockLLMClient: LLMClient {

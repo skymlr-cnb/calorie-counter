@@ -27,10 +27,18 @@
             let svc = service
             isLoading = true
             Task {
-              let newResults = (try? await svc.search(query: q)) ?? []
-              await MainActor.run {
-                results = newResults
-                isLoading = false
+              do {
+                let newResults = try await svc.search(query: q)
+                await MainActor.run {
+                  results = newResults
+                  isLoading = false
+                }
+              } catch {
+                print("[UITestHarnessView] Search failed: \(error)")
+                await MainActor.run {
+                  results = []
+                  isLoading = false
+                }
               }
             }
           }
